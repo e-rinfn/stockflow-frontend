@@ -1,0 +1,119 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Sidebar from '../components/Sidebar';
+import Navbar from '../components/Navbar';
+
+const ProfilePage = () => {
+  const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Mengambil data user dari localStorage
+    const storedData = localStorage.getItem('userData');
+    if (storedData) {
+      try {
+        const parsedData = JSON.parse(storedData);
+        setUserData(parsedData);
+      } catch (error) {
+        console.error('Gagal memparsing data user:', error);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    // Hapus data dari localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData');
+    // Redirect ke halaman login
+    navigate('/login');
+  };
+
+  if (!userData) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+
+    <div className="container-fluid">
+    <div className="row">
+      <Sidebar />
+      
+      <div className="col-md-10 p-4">
+        <Navbar />
+<div className='card p-3 mt-3 bg-light vh-100 border-0'>
+<h2 className="mb-4">Profil</h2>
+    {/* <div className="container py-5"> */}
+
+      <div className="row justify-content-center">
+        <div className="col-md-12">
+          <div className="card shadow">
+            <div className="card-header bg-light text-dark">
+              <h3 className="card-title mb-0">Edit Profil</h3>
+            </div>
+            <div className="card-body">
+              <div className="text-center mb-4">
+                <div className="bg-light rounded-circle d-inline-flex align-items-center justify-content-center" 
+                  style={{ width: '100px', height: '100px' }}>
+                  <span className="fs-1 text-primary">
+                    {userData.nama.charAt(0).toUpperCase()}
+                  </span>
+                </div>
+                <div className="col-md-12 mt-3">{userData.nama}</div>
+              </div>
+
+              <div className="mb-3">
+                
+                <div className="row mb-3">
+                  <div className="col-md-4 fw-bold">Nama Lengkap</div>
+                  <div className="col-md-8">: {userData.nama}</div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-md-4 fw-bold">Nama Pengguna</div>
+                  <div className="col-md-8">: {userData.nama}</div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-md-4 fw-bold">Email</div>
+                  <div className="col-md-8">: {userData.email}</div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-md-4 fw-bold">Role</div>
+                  <div className="col-md-8 text-capitalize">: {userData.role}</div>
+                </div>
+                <div className="row mb-3">
+                  <div className="col-md-4 fw-bold">Foto</div>
+                  <div className="col-md-8">: {userData.nama}</div>
+                </div>
+              </div>
+
+              <div className="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                <button 
+                  className="btn btn-outline-primary me-md-2"
+                  onClick={() => navigate('/edit-profile')}
+                >
+                  Edit Profil
+                </button>
+                <button 
+                  className="btn btn-danger"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
